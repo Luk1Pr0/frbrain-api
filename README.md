@@ -1,1 +1,1 @@
-# frbrain-api
+# frbrain-server
