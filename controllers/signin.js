@@ -1,11 +1,15 @@
 const handleSignin = (req, resp, db, bcrypt) => {
+	const { email, password } = req.body;
+	if (!email || !password) {
+		resp.status(400).json("Incorrect user details");
+	}
 	db.select("email", "hash").from("login")
-	.where("email", "=", req.body.email)
+	.where("email", "=", email)
 		.then(data => {
-			const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+			const isValid = bcrypt.compareSync(password, data[0].hash);
 			if (isValid) {
 				return db.select("*").from("users")
-				.where("email", "=", req.body.email)
+				.where("email", "=", email)
 				.then(user => {
 					resp.json(user[0])
 				})
